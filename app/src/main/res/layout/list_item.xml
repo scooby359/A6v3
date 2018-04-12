@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/circle" />
 
     <TextView
-        android:id="@+id/tv_ListItemVehicleReg"
+        android:id="@+id/tv_ListItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -29,5 +29,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/iv_ListItemIndicator"
         app:layout_constraintStart_toEndOf="@+id/iv_ListItemIndicator"
         app:layout_constraintTop_toTopOf="@+id/iv_ListItemIndicator"
-        tools:text="Vehicle Reg" />
+        tools:text="Title" />
 </android.support.constraint.ConstraintLayout>

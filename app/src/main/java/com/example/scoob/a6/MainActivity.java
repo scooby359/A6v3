@@ -1,5 +1,6 @@
 package com.example.scoob.a6;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,8 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Note note;
+    private AppDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,20 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //load db and wipe for testing
+        database.noteDao().removeAllNotes();
+
+        //add test data
+        List<Note> notes = database.noteDao().getAllNotes();
+        if (notes.size()==0){
+            database.noteDao().addNote(new Note(1, "V1", Note.GOOD, "Test note"));
+            note = database.noteDao().getAllNotes().get(0);
+            Toast.makeText(this, String.valueOf(note.getId()),Toast.LENGTH_SHORT).show();
+        }
+
+
+
     }
 
     @Override

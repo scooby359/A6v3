@@ -2,9 +2,9 @@
     <string name="app_name">A6</string>
     <string name="action_settings">Settings</string>
     <string name="listItemIndicator">Indicator</string>
-    <string name="EditRegNumber">Vehicle Registration</string>
+    <string name="EditRegNumber">Enter Title</string>
     <string name="EditNotes">Notes</string>
     <string name="EditStatus">Status</string>
     <string name="EditSave">Save</string>
-    <string name="EditRegHint">Enter Registration</string>
+    <string name="EditRegHint">Enter Title</string>
 </resources>
