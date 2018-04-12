@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //load db and wipe for testing
+        database = AppDatabase.getDatabase(getApplicationContext());
         database.noteDao().removeAllNotes();
 
         //add test data

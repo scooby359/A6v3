@@ -17,7 +17,7 @@ public class Note {
     public static final String NONE = "NONE";
 
     @PrimaryKey
-    private int id;
+    private final int id;
     private String title;
     private String status;
     private String note;
@@ -31,10 +31,6 @@ public class Note {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitle() {
