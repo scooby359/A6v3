@@ -13,4 +13,12 @@
     <string name="STATUS_WARNING">WARNING</string>
     <string name="STATUS_NONE">NONE</string>
 
+    <string-array name="spinner_array">
+        <item>None</item>
+        <item>Good</item>
+        <item>Bad</item>
+        <item>Warning</item>
+    </string-array>
+
+    <string name="BUNDLE_ID">id</string>
 </resources>

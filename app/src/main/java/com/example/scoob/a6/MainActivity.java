@@ -1,6 +1,12 @@
 package com.example.scoob.a6;
 
+//todo - search field
+//todo - new button
+//todo - set backup flag
+//todo - import and export features
+
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar
-                = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         listView = (ListView) findViewById(R.id.lv_mainList);
         setSupportActionBar(toolbar);
 
@@ -71,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
         note2.setStatus(getResources().getString(R.string.STATUS_BAD));
         note2.setNote("This is the 2nd note");
         database.noteDao().addNote(note2);
+
+        NoteEntity note3 = new NoteEntity();
+        note.setTitle("V3");
+        note.setStatus(getResources().getString(R.string.STATUS_WARNING));
+        note.setNote("This is the 3rd note");
+        database.noteDao().addNote(note);
 
         List<NoteEntity> tempList = database.noteDao().getAllNotes();
 
@@ -123,9 +134,10 @@ public class MainActivity extends AppCompatActivity {
 
             View listItem = convertView;
             if (listItem == null){
-                listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item,parent,false);
+                listItem = LayoutInflater.from(mContext)
+                        .inflate(R.layout.list_item,parent,false);
             }
-            NoteEntity currentNote = noteList.get(position);
+            final NoteEntity currentNote = noteList.get(position);
 
             ImageView indicator = (ImageView)listItem.findViewById(R.id.iv_ListItemIndicator);
             TextView title = (TextView)listItem.findViewById(R.id.tv_ListItemTitle);
@@ -134,11 +146,37 @@ public class MainActivity extends AppCompatActivity {
 
             if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_GOOD))){
                 indicator.setColorFilter(getResources().getColor(R.color.STATUS_GOOD));
-            }//todo - the rest of them!
+            }
+            if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_BAD))){
+                indicator.setColorFilter(getResources().getColor(R.color.STATUS_BAD));
+            }
+            if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_WARNING))){
+                indicator.setColorFilter(getResources().getColor(R.color.STATUS_WARNING));
+            }
+            if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_NONE))){
+                indicator.setColorFilter(getResources().getColor(R.color.STATUS_NONE));
+            }
+
+            listItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("Main","OnClick Called");
+                    Intent intent = new Intent(getContext(), EditItemActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(getResources()
+                            .getString(R.string.BUNDLE_ID), currentNote.getId());
+                    Log.d("Main Bundle","id = " + currentNote.getId());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
 
             return listItem;
+            //todo - needs to refresh when item changed
 
         }
+
+
     }
 
 }
