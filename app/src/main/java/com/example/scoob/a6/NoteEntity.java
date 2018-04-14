@@ -3,34 +3,32 @@ package com.example.scoob.a6;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 /**
  * Created by scoob on 12/04/2018.
  */
 
+
 @Entity
-public class Note {
+public class NoteEntity {
 
-    public static final String GOOD = "GOOD";
-    public static final String BAD = "BAD";
-    public static final String WARNING = "WARNING";
-    public static final String NONE = "NONE";
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+    public String title;
+    public String status;
+    public String note;
 
-    @PrimaryKey
-    private final int id;
-    private String title;
-    private String status;
-    private String note;
+    public NoteEntity(){}
 
-    public Note(int id, String title, String status, String note) {
-        this.id = id;
-        this.title = title;
-        this.status = status;
-        this.note = note;
-    }
-
+    @NonNull
     public int getId() {
         return id;
+    }
+
+    public void setId(@NonNull int id) {
+        this.id = id;
     }
 
     public String getTitle() {

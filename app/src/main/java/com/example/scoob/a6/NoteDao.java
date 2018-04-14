@@ -16,17 +16,17 @@ import java.util.List;
 public interface  NoteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addNote(Note note);
+    void addNote(NoteEntity note);
 
-    @Query("select * from note")
-    public List<Note> getAllNotes();
+    @Query("select * from noteentity")
+    public List<NoteEntity> getAllNotes();
 
-    @Query("select * from note where id = :id")
-    public List<Note> getNote(long id);
+    @Query("select * from noteentity where id = :id")
+    public NoteEntity getNote(int id);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateNote(Note note);
+    void updateNote(NoteEntity note);
 
-    @Query("delete from note")
+    @Query("delete from noteentity")
     void removeAllNotes();
 }

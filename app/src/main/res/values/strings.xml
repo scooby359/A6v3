@@ -7,4 +7,10 @@
     <string name="EditStatus">Status</string>
     <string name="EditSave">Save</string>
     <string name="EditRegHint">Enter Title</string>
+
+    <string name="STATUS_GOOD">GOOD</string>
+    <string name="STATUS_BAD">BAD</string>
+    <string name="STATUS_WARNING">WARNING</string>
+    <string name="STATUS_NONE">NONE</string>
+
 </resources>
