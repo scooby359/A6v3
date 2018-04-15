@@ -21,4 +21,10 @@
     </string-array>
 
     <string name="BUNDLE_ID">id</string>
+    <string name="DialogWantToSave">Do you want to save changes?</string>
+    <string name="DialogSave">Save</string>
+    <string name="DialogNo">No</string>
+    <string name="MainSearchIcon">Search Icon</string>
+    <string name="MainSearchEnterTitle">Enter Title</string>
+    <string name="SearchNew">New</string>
 </resources>

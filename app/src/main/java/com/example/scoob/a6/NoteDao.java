@@ -24,6 +24,9 @@ public interface  NoteDao {
     @Query("select * from noteentity where id = :id")
     public NoteEntity getNote(int id);
 
+    @Query("select * from noteentity where title LIKE :search")
+    public List<NoteEntity> searchNoteTitles(String search);
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateNote(NoteEntity note);
 

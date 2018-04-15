@@ -15,6 +15,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -42,26 +46,25 @@ public class MainActivity extends AppCompatActivity {
     private AppDatabase database;
     private ListView listView;
     private CustomAdapter mAdapter;
+    private EditText searchText;
+    private ImageView searchButton;
+
+    private Context context;
+    private List<NoteEntity> ListData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         listView = (ListView) findViewById(R.id.lv_mainList);
+        searchText = (EditText) findViewById(R.id.etSearchField);
+        searchButton = (ImageView) findViewById(R.id.ivSearchIcon);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         //Get db instance
-        database = AppDatabase.getDatabase(getApplicationContext());
+        database = AppDatabase.getDatabase(context);
         database.noteDao().removeAllNotes();
 
         //Load some data in for testing
@@ -83,13 +86,43 @@ public class MainActivity extends AppCompatActivity {
         note.setNote("This is the 3rd note");
         database.noteDao().addNote(note);
 
-        List<NoteEntity> tempList = database.noteDao().getAllNotes();
 
-        for (int i = 0; i < tempList.size(); i++)
-        {
-            Log.d("Array " + i, tempList.get(i).title);
-        }
+        //Get current list from DB and populate adapter
+        ListData = database.noteDao().getAllNotes();
+        mAdapter = new CustomAdapter(this, ListData);
+        listView.setAdapter(mAdapter);
 
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //null
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String fieldText = editable.toString();
+                String query = "%" + fieldText + "%";
+                ListData = database.noteDao().searchNoteTitles(query);
+                mAdapter = null;
+                mAdapter = new CustomAdapter(context, ListData);
+                listView.setAdapter(mAdapter);
+
+                for (int i=0; i < ListData.size(); i++){
+                    NoteEntity temp = ListData.get(i);
+                    Log.d("DB Response", "Title = " + temp.getTitle() + " Notes = " + temp.getNote() + " Status = " + temp.getStatus());
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mAdapter = new CustomAdapter(this, database.noteDao().getAllNotes());
         listView.setAdapter(mAdapter);
     }
@@ -143,7 +176,11 @@ public class MainActivity extends AppCompatActivity {
             TextView title = (TextView)listItem.findViewById(R.id.tv_ListItemTitle);
 
             title.setText(currentNote.title);
+            indicator.setVisibility(View.VISIBLE);
 
+           if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_NONE))){
+                indicator.setVisibility(View.INVISIBLE);
+            }
             if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_GOOD))){
                 indicator.setColorFilter(getResources().getColor(R.color.STATUS_GOOD));
             }
@@ -152,9 +189,6 @@ public class MainActivity extends AppCompatActivity {
             }
             if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_WARNING))){
                 indicator.setColorFilter(getResources().getColor(R.color.STATUS_WARNING));
-            }
-            if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_NONE))){
-                indicator.setColorFilter(getResources().getColor(R.color.STATUS_NONE));
             }
 
             listItem.setOnClickListener(new View.OnClickListener() {
@@ -171,9 +205,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            return listItem;
-            //todo - needs to refresh when item changed
+            indicator.setVisibility(View.VISIBLE);
 
+            return listItem;
         }
 
 
