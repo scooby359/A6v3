@@ -33,11 +33,11 @@ public class EditItemActivity extends AppCompatActivity {
         context = getApplicationContext();
         database = AppDatabase.getDatabase(context);
 
-        etEnterTitle = (EditText) findViewById(R.id.pt_EditTitle);
-        sStatus = (Spinner) findViewById(R.id.spin_EditStatus);
-        etNotes = (EditText) findViewById(R.id.et_EditNotes);
-        save = (Button) findViewById(R.id.btn_EditSave);
-        delete = (Button) findViewById(R.id.btn_EditDelete);
+        etEnterTitle = findViewById(R.id.pt_EditTitle);
+        sStatus = findViewById(R.id.spin_EditStatus);
+        etNotes = findViewById(R.id.et_EditNotes);
+        save = findViewById(R.id.btn_EditSave);
+        delete = findViewById(R.id.btn_EditDelete);
 
         //Set default spinner val
         sStatus.setSelection(0);

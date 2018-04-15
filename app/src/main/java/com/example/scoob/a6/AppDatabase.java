@@ -1,9 +1,5 @@
 package com.example.scoob.a6;
 
-/**
- * Created by scoob on 12/04/2018.
- */
-
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;

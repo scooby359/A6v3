@@ -20,13 +20,13 @@ public interface  NoteDao {
     void addNote(NoteEntity note);
 
     @Query("select * from noteentity")
-    public List<NoteEntity> getAllNotes();
+    List<NoteEntity> getAllNotes();
 
     @Query("select * from noteentity where id = :id")
-    public NoteEntity getNote(int id);
+    NoteEntity getNote(int id);
 
     @Query("select * from noteentity where title LIKE :search")
-    public List<NoteEntity> searchNoteTitles(String search);
+    List<NoteEntity> searchNoteTitles(String search);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateNote(NoteEntity note);
