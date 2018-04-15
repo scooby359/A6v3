@@ -27,4 +27,6 @@
     <string name="MainSearchIcon">Search Icon</string>
     <string name="MainSearchEnterTitle">Enter Title</string>
     <string name="SearchNew">New</string>
+    <string name="EditDelete">Delete</string>
+    <string name="BundleSearchStringKey">title</string>
 </resources>

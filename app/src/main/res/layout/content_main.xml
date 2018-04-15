@@ -70,6 +70,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_add_black_24dp" />
+
+        <ImageView
+            android:id="@+id/iv_searchCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:tint="#9E9E9E"
+            app:layout_constraintBottom_toBottomOf="@+id/etSearchField"
+            app:layout_constraintEnd_toEndOf="@+id/etSearchField"
+            app:layout_constraintTop_toTopOf="@+id/etSearchField"
+            app:srcCompat="@drawable/ic_cancel_black_24dp" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

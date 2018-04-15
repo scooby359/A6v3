@@ -1,7 +1,5 @@
 package com.example.scoob.a6;
 
-//todo - search field
-//todo - new button
 //todo - set backup flag
 //todo - import and export features
 
@@ -9,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -47,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private CustomAdapter mAdapter;
     private EditText searchText;
-    private ImageView searchButton;
+    private ImageView newButton;
+    private ImageView cancelButton;
 
     private Context context;
     private List<NoteEntity> ListData;
@@ -60,32 +60,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         listView = (ListView) findViewById(R.id.lv_mainList);
         searchText = (EditText) findViewById(R.id.etSearchField);
-        searchButton = (ImageView) findViewById(R.id.ivSearchIcon);
+        newButton = (ImageView) findViewById(R.id.ivNewIcon);
+        cancelButton = (ImageView) findViewById(R.id.iv_searchCancel);
         setSupportActionBar(toolbar);
 
         //Get db instance
         database = AppDatabase.getDatabase(context);
-        database.noteDao().removeAllNotes();
-
-        //Load some data in for testing
-        NoteEntity note = new NoteEntity();
-        note.setTitle("V1");
-        note.setStatus(getResources().getString(R.string.STATUS_GOOD));
-        note.setNote("This is the 1st note");
-        database.noteDao().addNote(note);
-
-        NoteEntity note2 = new NoteEntity();
-        note2.setTitle("V2");
-        note2.setStatus(getResources().getString(R.string.STATUS_BAD));
-        note2.setNote("This is the 2nd note");
-        database.noteDao().addNote(note2);
-
-        NoteEntity note3 = new NoteEntity();
-        note.setTitle("V3");
-        note.setStatus(getResources().getString(R.string.STATUS_WARNING));
-        note.setNote("This is the 3rd note");
-        database.noteDao().addNote(note);
-
 
         //Get current list from DB and populate adapter
         ListData = database.noteDao().getAllNotes();
@@ -118,6 +98,25 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        newButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, EditItemActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(getResources().getString(R.string.BUNDLE_ID), -1);
+                bundle.putString(getString(R.string.BundleSearchStringKey), searchText.getText().toString());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchText.setText("");
+            }
+        });
     }
 
     @Override
@@ -125,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         mAdapter = new CustomAdapter(this, database.noteDao().getAllNotes());
         listView.setAdapter(mAdapter);
+        searchText.setText("");
     }
 
     @Override
@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
             title.setText(currentNote.title);
             indicator.setVisibility(View.VISIBLE);
+            indicator.setImageResource(R.drawable.ic_brightness_1_black_24dp);
 
            if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_NONE))){
                 indicator.setVisibility(View.INVISIBLE);
@@ -194,18 +195,14 @@ public class MainActivity extends AppCompatActivity {
             listItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("Main","OnClick Called");
                     Intent intent = new Intent(getContext(), EditItemActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt(getResources()
                             .getString(R.string.BUNDLE_ID), currentNote.getId());
-                    Log.d("Main Bundle","id = " + currentNote.getId());
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
             });
-
-            indicator.setVisibility(View.VISIBLE);
 
             return listItem;
         }

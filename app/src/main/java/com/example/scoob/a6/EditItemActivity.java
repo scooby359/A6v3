@@ -1,6 +1,5 @@
 package com.example.scoob.a6;
 
-//todo - save if new
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +21,7 @@ public class EditItemActivity extends AppCompatActivity {
     Spinner sStatus;
     EditText etNotes;
     Button save;
+    Button delete;
     AppDatabase database;
     int id;
 
@@ -37,6 +37,7 @@ public class EditItemActivity extends AppCompatActivity {
         sStatus = (Spinner) findViewById(R.id.spin_EditStatus);
         etNotes = (EditText) findViewById(R.id.et_EditNotes);
         save = (Button) findViewById(R.id.btn_EditSave);
+        delete = (Button) findViewById(R.id.btn_EditDelete);
 
         //Set default spinner val
         sStatus.setSelection(0);
@@ -48,19 +49,25 @@ public class EditItemActivity extends AppCompatActivity {
         if (bundle != null) {
             //Get id from bundle, get note from db, then populate fields
             id = bundle.getInt(getResources().getString(R.string.BUNDLE_ID));
-            LoadedNote = database.noteDao().getNote(id);
-            etEnterTitle.setText(LoadedNote.getTitle());
-            etNotes.setText(LoadedNote.getNote());
-            String status = LoadedNote.getStatus();
-            if (status.equals(getResources().getString(R.string.STATUS_GOOD))) {
-                sStatus.setSelection(1);
-                loadedStatus = 1;
-            } else if (status.equals(getResources().getString(R.string.STATUS_BAD))) {
-                sStatus.setSelection(2);
-                loadedStatus = 2;
-            } else if (status.equals(getResources().getString(R.string.STATUS_WARNING))) {
-                sStatus.setSelection(3);
-                loadedStatus = 3;
+
+            if (id != -1){
+                LoadedNote = database.noteDao().getNote(id);
+                etEnterTitle.setText(LoadedNote.getTitle());
+                etNotes.setText(LoadedNote.getNote());
+                String status = LoadedNote.getStatus();
+                if (status.equals(getResources().getString(R.string.STATUS_GOOD))) {
+                    sStatus.setSelection(1);
+                    loadedStatus = 1;
+                } else if (status.equals(getResources().getString(R.string.STATUS_BAD))) {
+                    sStatus.setSelection(2);
+                    loadedStatus = 2;
+                } else if (status.equals(getResources().getString(R.string.STATUS_WARNING))) {
+                    sStatus.setSelection(3);
+                    loadedStatus = 3;
+                }
+            }else{
+                String newTitle = bundle.getString(getResources().getString(R.string.BundleSearchStringKey));
+                etEnterTitle.setText(newTitle);
             }
         }
 
@@ -72,30 +79,63 @@ public class EditItemActivity extends AppCompatActivity {
             }
         });
 
+        if (id == -1){
+            delete.setVisibility(View.GONE);
+        }
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditItemActivity.this);
+                builder
+                        .setMessage("Are you sure you want to delete this note?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                database.noteDao().deleteNote(LoadedNote);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //No action..
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+
     }
 
     boolean CheckForChanges(){
 
         boolean changesMade = false;
 
-        if (!etEnterTitle.getText().toString().equals(LoadedNote.getTitle())){
-            changesMade = true;
+        if (id == -1){ //Checks for new note changes
+            if (etEnterTitle.getText().toString().length() != 0){
+                changesMade = true;
+            }
+        }else{  //checks for changes to existing note
+            if (!etEnterTitle.getText().toString().equals(LoadedNote.getTitle())){
+                changesMade = true;
+            }
+            if (!etNotes.getText().toString().equals(LoadedNote.getNote())){
+                changesMade = true;
+            }
+            int newStatus = sStatus.getSelectedItemPosition();
+            if (loadedStatus!=newStatus){
+                changesMade = true;
+            }
         }
-        if (!etNotes.getText().toString().equals(LoadedNote.getNote())){
-            changesMade = true;
-        }
-        int newStatus = sStatus.getSelectedItemPosition();
-        if (loadedStatus!=newStatus){
-            changesMade = true;
-        }
-
         return changesMade;
     }
 
     private void SaveNote() {
         NoteEntity note = new NoteEntity();
 
-        note.setTitle(etEnterTitle.getText().toString());
+        note.setTitle(etEnterTitle.getText().toString().toUpperCase());
         note.setNote(etNotes.getText().toString());
         if (id != -1) {
             note.setId(id);
@@ -124,7 +164,7 @@ public class EditItemActivity extends AppCompatActivity {
     public void onBackPressed() {
         //do some sort of check if changes made
 
-        if ((LoadedNote != null) && CheckForChanges()){
+        if (CheckForChanges()){
             AlertDialog.Builder builder = new AlertDialog.Builder(EditItemActivity.this);
             builder
                     .setMessage(R.string.DialogWantToSave)
