@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(context, TestActivitiy.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
