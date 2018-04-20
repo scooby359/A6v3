@@ -1,34 +1,30 @@
 package com.example.scoob.a6;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class TestActivitiy extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     private static final String TAG = "TestActivity";
     private static final int REQUEST_CODE = 123;
 
-    TextView mTextField;
-    Button mTestButton;
+    Context context;
+    Button mImportButton;
+
+    Uri fileUri;
 
     // TODO: 18/04/2018 - Continue read file 
-    //This works!! Opens file selector, returns URI to file.
-    //Needs permission for external read access in manifest
-    //Need to follow on, how to read contents of file.
     //And at somepoint, how to write!
     //https://developer.android.com/guide/topics/providers/document-provider.html
     
@@ -36,16 +32,19 @@ public class TestActivitiy extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_activitiy);
 
-        mTextField = findViewById(R.id.pt_TestText);
-        mTestButton = findViewById(R.id.btn_TestIntent);
+        context = getApplicationContext();
+        Log.d(TAG, "onCreate: context = " + context);
 
-        mTestButton.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_settings);
+
+        mImportButton = findViewById(R.id.btn_selectImportFile);
+
+        mImportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.setType("*/*");
+                intent.setType("text/*");
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -57,13 +56,19 @@ public class TestActivitiy extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            Uri uri = null;
+            fileUri = null;
             if (data != null){
-                uri = data.getData();
-                Log.d(TAG, "onActivityResult: File Select Result = " + uri);
+                fileUri = data.getData();
+                Toast.makeText(this, "URI: " + fileUri, Toast.LENGTH_SHORT).show();
+                DataImportExport dataImportExport = new DataImportExport();
+                try {
+                    dataImportExport.readDataIn(context, fileUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            mTextField.append(uri.toString());
         }
-
     }
+
+
 }

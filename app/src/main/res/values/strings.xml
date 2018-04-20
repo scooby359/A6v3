@@ -29,4 +29,6 @@
     <string name="SearchNew">New</string>
     <string name="EditDelete">Delete</string>
     <string name="BundleSearchStringKey">title</string>
+    <string name="settingsImport">Import Data From File</string>
+    <string name="settingsSelectFileButton">Select File</string>
 </resources>

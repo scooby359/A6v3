@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".EditItemActivity" />
-        <activity android:name=".TestActivitiy"></activity>
+        <activity android:name=".SettingsActivity"></activity>
 
     </application>
 

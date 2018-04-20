@@ -26,6 +26,7 @@
         android:ems="10"
         android:hint="@string/EditRegHint"
         android:inputType="textPersonName"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_EditTitle" />
