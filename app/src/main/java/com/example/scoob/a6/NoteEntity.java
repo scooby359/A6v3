@@ -16,10 +16,10 @@ public class NoteEntity {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
     public String title;
-    public String status;
-    public String note;
+    private String status;
+    private String note;
 
     public NoteEntity(){}
 
@@ -27,10 +27,20 @@ public class NoteEntity {
     public NoteEntity(String title, String status, String note){
         this.title = title.toUpperCase();
         this.note = note;
-        if (status.equals("0")){this.status = MainActivity.BAD;}
-        else if (status.equals("1")){this.status = MainActivity.GOOD;}
-        else if (status.equals("3")){this.status = MainActivity.WARNING;}
-        else{this.status = MainActivity.NONE;}
+        switch (status) {
+            case "0":
+                this.status = MainActivity.BAD;
+                break;
+            case "1":
+                this.status = MainActivity.GOOD;
+                break;
+            case "3":
+                this.status = MainActivity.WARNING;
+                break;
+            default:
+                this.status = MainActivity.NONE;
+                break;
+        }
     }
 
     @NonNull

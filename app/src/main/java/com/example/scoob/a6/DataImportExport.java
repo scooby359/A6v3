@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
-public class DataImportExport {
+class DataImportExport {
 
     private static final String TAG = "DataImportExport";
 

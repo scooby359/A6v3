@@ -26,12 +26,12 @@ public class SettingsActivity extends AppCompatActivity {
     private static final int MY_PERMISSION_WRITE_ACCESS = 99;
 
 
-    Context context;
-    Button mImportButton;
-    Button mExportButton;
-    Button mDeleteAllButton;
+    private Context context;
+    private Button mImportButton;
+    private Button mExportButton;
+    private Button mDeleteAllButton;
 
-    Uri fileUri;
+    private Uri fileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

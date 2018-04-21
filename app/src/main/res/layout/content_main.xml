@@ -78,6 +78,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:contentDescription="@string/mainCancelSearchBtnLabel"
             android:tint="#9E9E9E"
             app:layout_constraintBottom_toBottomOf="@+id/etSearchField"
             app:layout_constraintEnd_toEndOf="@+id/etSearchField"

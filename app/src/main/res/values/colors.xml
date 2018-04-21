@@ -7,5 +7,4 @@
     <color name="STATUS_GOOD">#8BC34A</color>
     <color name="STATUS_BAD">#607D8B</color>
     <color name="STATUS_WARNING">#f44336</color>
-    <color name="STATUS_NONE">#FFFFFF</color>
 </resources>

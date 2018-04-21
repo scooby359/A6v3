@@ -135,10 +135,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public class CustomAdapter extends ArrayAdapter<NoteEntity>{
+    class CustomAdapter extends ArrayAdapter<NoteEntity>{
 
-        private Context mContext;
-        private List<NoteEntity> noteList;
+        private final Context mContext;
+        private final List<NoteEntity> noteList;
 
         CustomAdapter(Context context, List<NoteEntity> list){
             super(context, 0, list);
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void SortList(List<NoteEntity> list){
+    private void SortList(List<NoteEntity> list){
         Collections.sort(list, new Comparator<NoteEntity>() {
             @Override
             public int compare(NoteEntity t1, NoteEntity t2) {

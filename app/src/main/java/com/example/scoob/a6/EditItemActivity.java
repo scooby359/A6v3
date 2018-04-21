@@ -14,16 +14,16 @@ import android.widget.Spinner;
 
 public class EditItemActivity extends AppCompatActivity {
 
-    NoteEntity LoadedNote;
-    int loadedStatus;
-    Context context;
-    EditText etEnterTitle;
-    Spinner sStatus;
-    EditText etNotes;
-    Button save;
-    Button delete;
-    AppDatabase database;
-    int id;
+    private NoteEntity LoadedNote;
+    private int loadedStatus;
+    private Context context;
+    private EditText etEnterTitle;
+    private Spinner sStatus;
+    private EditText etNotes;
+    private Button save;
+    private Button delete;
+    private AppDatabase database;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class EditItemActivity extends AppCompatActivity {
 
     }
 
-    boolean CheckForChanges(){
+    private boolean CheckForChanges(){
 
         boolean changesMade = false;
 
@@ -143,14 +143,19 @@ public class EditItemActivity extends AppCompatActivity {
 
         int selectedSpin = sStatus.getSelectedItemPosition();
 
-        if (selectedSpin == 0) {
-            note.setStatus(getResources().getString(R.string.STATUS_NONE));
-        } else if (selectedSpin == 1) {
-            note.setStatus(getResources().getString(R.string.STATUS_GOOD));
-        } else if (selectedSpin == 2) {
-            note.setStatus(getResources().getString(R.string.STATUS_BAD));
-        } else if (selectedSpin == 3) {
-            note.setStatus(getResources().getString(R.string.STATUS_WARNING));
+        switch (selectedSpin) {
+            case 0:
+                note.setStatus(getResources().getString(R.string.STATUS_NONE));
+                break;
+            case 1:
+                note.setStatus(getResources().getString(R.string.STATUS_GOOD));
+                break;
+            case 2:
+                note.setStatus(getResources().getString(R.string.STATUS_BAD));
+                break;
+            case 3:
+                note.setStatus(getResources().getString(R.string.STATUS_WARNING));
+                break;
         }
 
         if (id == -1) {
