@@ -1,8 +1,5 @@
 package com.example.scoob.a6;
 
-//todo - set backup flag
-//todo - import and export features
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private CustomAdapter mAdapter;
     private EditText searchText;
-    private ImageView newButton;
-    private ImageView cancelButton;
 
     private Context context;
     private List<NoteEntity> ListData;
@@ -51,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         listView = findViewById(R.id.lv_mainList);
         searchText = findViewById(R.id.etSearchField);
-        newButton = findViewById(R.id.ivNewIcon);
-        cancelButton = findViewById(R.id.iv_searchCancel);
+        ImageView newButton = findViewById(R.id.ivNewIcon);
+        ImageView cancelButton = findViewById(R.id.iv_searchCancel);
         setSupportActionBar(toolbar);
 
         //Get db instance
@@ -71,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -79,14 +74,10 @@ public class MainActivity extends AppCompatActivity {
                 String fieldText = editable.toString();
                 String query = "%" + fieldText + "%";
                 ListData = database.noteDao().searchNoteTitles(query);
+                SortList(ListData);
                 mAdapter = null;
                 mAdapter = new CustomAdapter(context, ListData);
                 listView.setAdapter(mAdapter);
-
-                for (int i=0; i < ListData.size(); i++){
-                    NoteEntity temp = ListData.get(i);
-                    Log.d("DB Response", "Title = " + temp.getTitle() + " Notes = " + temp.getNote() + " Status = " + temp.getStatus());
-                }
             }
         });
 
@@ -102,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAdapter = new CustomAdapter(this, database.noteDao().getAllNotes());
+        ListData = database.noteDao().getAllNotes();
+        SortList(ListData);
+        mAdapter = new CustomAdapter(this, ListData);
         listView.setAdapter(mAdapter);
         searchText.setText("");
     }
@@ -176,13 +168,13 @@ public class MainActivity extends AppCompatActivity {
                 indicator.setVisibility(View.INVISIBLE);
             }
             if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_GOOD))){
-                indicator.setColorFilter(getResources().getColor(R.color.STATUS_GOOD));
+                indicator.setColorFilter(getColor(R.color.STATUS_GOOD));
             }
             if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_BAD))){
-                indicator.setColorFilter(getResources().getColor(R.color.STATUS_BAD));
+                indicator.setColorFilter(getColor(R.color.STATUS_BAD));
             }
             if (currentNote.getStatus().equals(getResources().getString(R.string.STATUS_WARNING))){
-                indicator.setColorFilter(getResources().getColor(R.color.STATUS_WARNING));
+                indicator.setColorFilter(getColor(R.color.STATUS_WARNING));
             }
 
             listItem.setOnClickListener(new View.OnClickListener() {
@@ -199,8 +191,14 @@ public class MainActivity extends AppCompatActivity {
 
             return listItem;
         }
-
-
     }
 
+    void SortList(List<NoteEntity> list){
+        Collections.sort(list, new Comparator<NoteEntity>() {
+            @Override
+            public int compare(NoteEntity t1, NoteEntity t2) {
+                return t1.getTitle().compareTo(t2.getTitle());
+            }
+        });
+    }
 }

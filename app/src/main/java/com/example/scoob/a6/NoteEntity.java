@@ -70,4 +70,5 @@ public class NoteEntity {
     void PrintNote(){
         Log.d("NoteEntity", "PrintNote: " + this.title + " " + this.status + " " + this.note);
     }
+
 }

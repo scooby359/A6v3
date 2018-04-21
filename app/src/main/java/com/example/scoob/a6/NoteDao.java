@@ -19,7 +19,7 @@ public interface  NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addNote(NoteEntity note);
 
-    @Query("select * from noteentity")
+    @Query("select * from noteentity ORDER BY title DESC")
     List<NoteEntity> getAllNotes();
 
     @Query("select * from noteentity where id = :id")

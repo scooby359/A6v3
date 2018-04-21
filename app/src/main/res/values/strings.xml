@@ -31,4 +31,9 @@
     <string name="BundleSearchStringKey">title</string>
     <string name="settingsImport">Import Data From File</string>
     <string name="settingsSelectFileButton">Select File</string>
+    <string name="settingsBtnExport">Export Data</string>
+    <string name="settingsExportLabel">Export Data to CSV</string>
+    <string name="settingsDeleteAllLabel">Delete All Notes</string>
+    <string name="settingsDeleteBtn">Delete All</string>
+    <string name="settingsDeleteNotesDialogConfirm">Delete All</string>
 </resources>
