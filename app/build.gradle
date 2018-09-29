@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.scoob.a6"
+        applicationId 'com.cwalton.a6'
         minSdkVersion 26
         targetSdkVersion 26
         versionCode 1
@@ -17,6 +17,8 @@ android {
         }
     }
     buildToolsVersion '27.0.3'
+    productFlavors {
+    }
 }
 
 dependencies {
